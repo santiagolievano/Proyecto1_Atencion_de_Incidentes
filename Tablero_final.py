@@ -265,6 +265,8 @@ def actualizar(priority, urgency, group, sla_by):
         html.Div([html.H4("% SLA cumplido"), html.H3(f"{sla:.1f}%" if not np.isnan(sla) else "N/A")], style={"border":"1px solid #ddd","padding":"10px","borderRadius":"8px","width":"200px"}),
     ]
 
+
+
     fig_hist = fig_histograma(df_f)
     fig_box_p = fig_box(df_f, by="priority") if "priority" in df_f.columns else go.Figure()
     fig_box_u = fig_box(df_f, by="urgency") if "urgency" in df_f.columns else go.Figure()
