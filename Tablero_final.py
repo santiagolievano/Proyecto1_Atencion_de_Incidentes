@@ -14,7 +14,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 
 # Carga 
-df = pd.read_csv("incident_event_log.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/santiagolievano/Proyecto1_Atencion_de_Incidentes/main/incident_event_log.csv")
 
 # Fechas
 for col in ["opened_at","resolved_at","closed_at"]:
