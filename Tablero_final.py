@@ -13,9 +13,7 @@ from sklearn.metrics import r2_score, mean_absolute_error
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 
-# ----------------------
-# Carga y preparación
-# ----------------------
+# Carga 
 df = pd.read_csv("incident_event_log.csv")
 
 # Fechas
@@ -58,9 +56,8 @@ df["impact_num"]   = df["impact_norm"].map(imp_map)   if "impact" in df.columns 
 # Top grupos
 top_groups = df["assignment_group"].value_counts().head(15).index.tolist() if "assignment_group" in df.columns else []
 
-# ----------------------
-# Helpers de figuras
-# ----------------------
+#figuras
+
 def fig_histograma(df_f):
     if df_f.empty:
         return go.Figure()
@@ -100,9 +97,8 @@ def kpis(df_f):
     sla = df_f["made_sla"].mean()*100 if "made_sla" in df_f.columns else np.nan
     return mean_h, median_h, sla
 
-# ----------------------
 # Modelo predictivo rápido (regresión)
-# ----------------------
+
 def preparar_features(df_in):
     feats = pd.DataFrame(index=df_in.index)
     for col in ["priority_num","urgency_num","impact_num","reassignment_count","reopen_count"]:
@@ -167,9 +163,8 @@ def fig_importancias(coefs):
     fig.update_layout(title="Importancia/Coeficientes (top 15) – Regresión lineal")
     return fig
 
-# ----------------------
-# App Dash
-# ----------------------
+#Dash
+
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
@@ -270,6 +265,8 @@ def actualizar(priority, urgency, group, sla_by):
         html.Div([html.H4("% SLA cumplido"), html.H3(f"{sla:.1f}%" if not np.isnan(sla) else "N/A")], style={"border":"1px solid #ddd","padding":"10px","borderRadius":"8px","width":"200px"}),
     ]
 
+
+
     fig_hist = fig_histograma(df_f)
     fig_box_p = fig_box(df_f, by="priority") if "priority" in df_f.columns else go.Figure()
     fig_box_u = fig_box(df_f, by="urgency") if "urgency" in df_f.columns else go.Figure()
@@ -282,4 +279,4 @@ def actualizar(priority, urgency, group, sla_by):
     return kpi_cards, fig_hist, fig_box_p, fig_box_u, fig_sla, fig_pvr, fig_imp
 
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8050, debug=False)
+    app.run(host="0.0.0.0", port=8050, debug=False)
